@@ -1,0 +1,3 @@
+/Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/CMakeFiles/heat_solver.dir
+/Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/CMakeFiles/edit_cache.dir
+/Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/CMakeFiles/rebuild_cache.dir
