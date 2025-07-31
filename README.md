@@ -1,2 +1,2 @@
-# fem-heat-equation-cpp
- Finite element solver for the 2D heat equation in C++ 
+# fem-wave-equation-cpp
+ Finite element solver for the 2D wave equation in C++ 
