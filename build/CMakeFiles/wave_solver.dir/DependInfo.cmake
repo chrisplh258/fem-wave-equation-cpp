@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/src/main.cpp" "CMakeFiles/heat_solver.dir/src/main.cpp.o" "gcc" "CMakeFiles/heat_solver.dir/src/main.cpp.o.d"
+  "/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/main.cpp" "CMakeFiles/wave_solver.dir/src/main.cpp.o" "gcc" "CMakeFiles/wave_solver.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

@@ -54,20 +54,20 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp
+CMAKE_SOURCE_DIR = /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build
+CMAKE_BINARY_DIR = /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/heat_solver.dir/all
+all: CMakeFiles/wave_solver.dir/all
 .PHONY : all
 
 # The main recursive "codegen" target.
-codegen: CMakeFiles/heat_solver.dir/codegen
+codegen: CMakeFiles/wave_solver.dir/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
@@ -75,40 +75,40 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/heat_solver.dir/clean
+clean: CMakeFiles/wave_solver.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/heat_solver.dir
+# Target rules for target CMakeFiles/wave_solver.dir
 
 # All Build rule for target.
-CMakeFiles/heat_solver.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/heat_solver.dir/build.make CMakeFiles/heat_solver.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/heat_solver.dir/build.make CMakeFiles/heat_solver.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/CMakeFiles --progress-num=1,2 "Built target heat_solver"
-.PHONY : CMakeFiles/heat_solver.dir/all
+CMakeFiles/wave_solver.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles --progress-num=1,2 "Built target wave_solver"
+.PHONY : CMakeFiles/wave_solver.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/heat_solver.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/heat_solver.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/CMakeFiles 0
-.PHONY : CMakeFiles/heat_solver.dir/rule
+CMakeFiles/wave_solver.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/wave_solver.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles 0
+.PHONY : CMakeFiles/wave_solver.dir/rule
 
 # Convenience name for target.
-heat_solver: CMakeFiles/heat_solver.dir/rule
-.PHONY : heat_solver
+wave_solver: CMakeFiles/wave_solver.dir/rule
+.PHONY : wave_solver
 
 # codegen rule for target.
-CMakeFiles/heat_solver.dir/codegen:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/heat_solver.dir/build.make CMakeFiles/heat_solver.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/CMakeFiles --progress-num=1,2 "Finished codegen for target heat_solver"
-.PHONY : CMakeFiles/heat_solver.dir/codegen
+CMakeFiles/wave_solver.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles --progress-num=1,2 "Finished codegen for target wave_solver"
+.PHONY : CMakeFiles/wave_solver.dir/codegen
 
 # clean rule for target.
-CMakeFiles/heat_solver.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/heat_solver.dir/build.make CMakeFiles/heat_solver.dir/clean
-.PHONY : CMakeFiles/heat_solver.dir/clean
+CMakeFiles/wave_solver.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/clean
+.PHONY : CMakeFiles/wave_solver.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

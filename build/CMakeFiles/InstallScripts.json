@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"/Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/cmake_install.cmake"
+		"/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

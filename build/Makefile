@@ -57,10 +57,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp
+CMAKE_SOURCE_DIR = /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build
+CMAKE_BINARY_DIR = /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/CMakeFiles /Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-heat-equation-cpp/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named heat_solver
+# Target rules for targets named wave_solver
 
 # Build rule for target.
-heat_solver: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 heat_solver
-.PHONY : heat_solver
+wave_solver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 wave_solver
+.PHONY : wave_solver
 
 # fast build rule for target.
-heat_solver/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/heat_solver.dir/build.make CMakeFiles/heat_solver.dir/build
-.PHONY : heat_solver/fast
+wave_solver/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/build
+.PHONY : wave_solver/fast
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/heat_solver.dir/build.make CMakeFiles/heat_solver.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -142,7 +142,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/heat_solver.dir/build.make CMakeFiles/heat_solver.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -150,7 +150,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/heat_solver.dir/build.make CMakeFiles/heat_solver.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 # Help Target
@@ -161,7 +161,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... heat_solver"
+	@echo "... wave_solver"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
