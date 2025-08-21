@@ -1,5 +1,4 @@
 #pragma once
-
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/lac/sparse_matrix.h>
 

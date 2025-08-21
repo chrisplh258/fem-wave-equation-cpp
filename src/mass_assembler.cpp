@@ -4,6 +4,8 @@
 #include <deal.II/fe/fe_values.h>
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/lac/dynamic_sparsity_pattern.h>
+#include <vector>
+
 
 //Dimension
 template <int dim>
@@ -24,7 +26,7 @@ void assemble_mass_matrix_fe(const dealii::DoFHandler<dim> &dof_handler,
 
   //dofs per cell
   const unsigned int dofs_per_cell = fe.n_dofs_per_cell();
-  //Total number pf quadrature points per element
+  //Total number of quadrature points per element
   const unsigned int n_q = quad.size();
   //total dofs
   const unsigned int n_dofs = dof_handler.n_dofs();
