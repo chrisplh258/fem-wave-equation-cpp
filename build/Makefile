@@ -153,6 +153,54 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/mass_assembler.o: src/mass_assembler.cpp.o
+.PHONY : src/mass_assembler.o
+
+# target to build an object file
+src/mass_assembler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o
+.PHONY : src/mass_assembler.cpp.o
+
+src/mass_assembler.i: src/mass_assembler.cpp.i
+.PHONY : src/mass_assembler.i
+
+# target to preprocess a source file
+src/mass_assembler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.i
+.PHONY : src/mass_assembler.cpp.i
+
+src/mass_assembler.s: src/mass_assembler.cpp.s
+.PHONY : src/mass_assembler.s
+
+# target to generate assembly for a file
+src/mass_assembler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.s
+.PHONY : src/mass_assembler.cpp.s
+
+src/stifness_assembler.o: src/stifness_assembler.cpp.o
+.PHONY : src/stifness_assembler.o
+
+# target to build an object file
+src/stifness_assembler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o
+.PHONY : src/stifness_assembler.cpp.o
+
+src/stifness_assembler.i: src/stifness_assembler.cpp.i
+.PHONY : src/stifness_assembler.i
+
+# target to preprocess a source file
+src/stifness_assembler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.i
+.PHONY : src/stifness_assembler.cpp.i
+
+src/stifness_assembler.s: src/stifness_assembler.cpp.s
+.PHONY : src/stifness_assembler.s
+
+# target to generate assembly for a file
+src/stifness_assembler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.s
+.PHONY : src/stifness_assembler.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -165,6 +213,12 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/mass_assembler.o"
+	@echo "... src/mass_assembler.i"
+	@echo "... src/mass_assembler.s"
+	@echo "... src/stifness_assembler.o"
+	@echo "... src/stifness_assembler.i"
+	@echo "... src/stifness_assembler.s"
 .PHONY : help
 
 

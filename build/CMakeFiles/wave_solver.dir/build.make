@@ -76,24 +76,56 @@ CMakeFiles/wave_solver.dir/src/main.cpp.o: CMakeFiles/wave_solver.dir/flags.make
 CMakeFiles/wave_solver.dir/src/main.cpp.o: /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/main.cpp
 CMakeFiles/wave_solver.dir/src/main.cpp.o: CMakeFiles/wave_solver.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/wave_solver.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/wave_solver.dir/src/main.cpp.o -MF CMakeFiles/wave_solver.dir/src/main.cpp.o.d -o CMakeFiles/wave_solver.dir/src/main.cpp.o -c /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/main.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/wave_solver.dir/src/main.cpp.o -MF CMakeFiles/wave_solver.dir/src/main.cpp.o.d -o CMakeFiles/wave_solver.dir/src/main.cpp.o -c /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/main.cpp
 
 CMakeFiles/wave_solver.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/wave_solver.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/main.cpp > CMakeFiles/wave_solver.dir/src/main.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/main.cpp > CMakeFiles/wave_solver.dir/src/main.cpp.i
 
 CMakeFiles/wave_solver.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/wave_solver.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/main.cpp -o CMakeFiles/wave_solver.dir/src/main.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/main.cpp -o CMakeFiles/wave_solver.dir/src/main.cpp.s
+
+CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o: CMakeFiles/wave_solver.dir/flags.make
+CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o: /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/mass_assembler.cpp
+CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o: CMakeFiles/wave_solver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o -MF CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o.d -o CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o -c /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/mass_assembler.cpp
+
+CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.i"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/mass_assembler.cpp > CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.i
+
+CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.s"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/mass_assembler.cpp -o CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.s
+
+CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o: CMakeFiles/wave_solver.dir/flags.make
+CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o: /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/stifness_assembler.cpp
+CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o: CMakeFiles/wave_solver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o -MF CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o.d -o CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o -c /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/stifness_assembler.cpp
+
+CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.i"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/stifness_assembler.cpp > CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.i
+
+CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.s"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/stifness_assembler.cpp -o CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.s
 
 # Object files for target wave_solver
 wave_solver_OBJECTS = \
-"CMakeFiles/wave_solver.dir/src/main.cpp.o"
+"CMakeFiles/wave_solver.dir/src/main.cpp.o" \
+"CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o" \
+"CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o"
 
 # External object files for target wave_solver
 wave_solver_EXTERNAL_OBJECTS =
 
 wave_solver: CMakeFiles/wave_solver.dir/src/main.cpp.o
+wave_solver: CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o
+wave_solver: CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o
 wave_solver: CMakeFiles/wave_solver.dir/build.make
 wave_solver: /Users/chrpi428/Documents/software/deal.II-v9.7.0/lib/libdeal_II.9.7.0.dylib
 wave_solver: /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/libz.tbd
@@ -172,7 +204,7 @@ wave_solver: /opt/homebrew/Cellar/open-mpi/5.0.8/lib/libmpi.dylib
 wave_solver: /Users/chrpi428/Documents/software/p4est-2.3.6/FAST/lib/libp4est.dylib
 wave_solver: /Users/chrpi428/Documents/software/p4est-2.3.6/FAST/lib/libsc.dylib
 wave_solver: CMakeFiles/wave_solver.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable wave_solver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable wave_solver"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/wave_solver.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

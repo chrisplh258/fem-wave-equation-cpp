@@ -7,6 +7,10 @@
 #include <deal.II/lac/full_matrix.h>                  
 #include <vector>                                      
 
+#include <deal.II/lac/sparsity_pattern.h>    
+#include <deal.II/lac/vector_operation.h>    
+#include <deal.II/base/tensor.h>              
+
 
 
 template <int dim>
@@ -31,15 +35,7 @@ void assemble_stiffness_matrix_fe(const dealii::DoFHandler<dim> &dof_handler,
   const unsigned int dofs_per_cell = fe.n_dofs_per_cell();
   //Total number of quadrature points per element
   const unsigned int n_q = quad.size();
-  //total dofs
-  const unsigned int n_dofs = dof_handler.n_dofs();
 
-  // Create sparsity pattern for the mass matrix based on mesh connectivity
-  dealii::DynamicSparsityPattern dsp(n_dofs);
-  dealii::DoFTools::make_sparsity_pattern(dof_handler, dsp);
-
-  // Initialize the sparse mass matrix using this pattern
-  K.reinit(dsp);
 
   dealii::FullMatrix<double> cell(dofs_per_cell, dofs_per_cell);
   std::vector<dealii::types::global_dof_index> dof_indices(dofs_per_cell);
@@ -79,7 +75,8 @@ void assemble_stiffness_matrix_fe(const dealii::DoFHandler<dim> &dof_handler,
         K.add(dof_indices[i], dof_indices[j], cell(i, j));
   }
 
-  K.compress();
+  K.compress(dealii::VectorOperation::add);
+
 }
 
 // Compile for 2D

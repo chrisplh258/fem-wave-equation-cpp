@@ -3,7 +3,12 @@
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/fe/fe_values.h>
 #include <deal.II/dofs/dof_tools.h>
+
 #include <deal.II/lac/dynamic_sparsity_pattern.h>
+#include <deal.II/lac/sparsity_pattern.h>
+#include <deal.II/lac/full_matrix.h>
+#include <deal.II/lac/vector_operation.h>
+
 #include <vector>
 
 
@@ -28,15 +33,6 @@ void assemble_mass_matrix_fe(const dealii::DoFHandler<dim> &dof_handler,
   const unsigned int dofs_per_cell = fe.n_dofs_per_cell();
   //Total number of quadrature points per element
   const unsigned int n_q = quad.size();
-  //total dofs
-  const unsigned int n_dofs = dof_handler.n_dofs();
-
-  // Create sparsity pattern for the mass matrix based on mesh connectivity
-  dealii::DynamicSparsityPattern sparsity_pattern(n_dofs);
-  dealii::DoFTools::make_sparsity_pattern(dof_handler, sparsity_pattern);
-
-  // Initialize the sparse mass matrix using this pattern
-  M.reinit(sparsity_pattern);
 
   dealii::FullMatrix<double> cell(dofs_per_cell, dofs_per_cell);
   std::vector<dealii::types::global_dof_index> dof_indices(dofs_per_cell);
@@ -67,7 +63,7 @@ void assemble_mass_matrix_fe(const dealii::DoFHandler<dim> &dof_handler,
         M.add(dof_indices[i], dof_indices[j], cell(i,j));
   }
 
-  M.compress();
+M.compress(dealii::VectorOperation::add);
 }
 
 // Compile for 2D
