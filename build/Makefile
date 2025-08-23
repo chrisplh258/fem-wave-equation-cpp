@@ -177,29 +177,29 @@ src/mass_assembler.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.s
 .PHONY : src/mass_assembler.cpp.s
 
-src/stifness_assembler.o: src/stifness_assembler.cpp.o
-.PHONY : src/stifness_assembler.o
+src/stiffness_assembler.o: src/stiffness_assembler.cpp.o
+.PHONY : src/stiffness_assembler.o
 
 # target to build an object file
-src/stifness_assembler.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o
-.PHONY : src/stifness_assembler.cpp.o
+src/stiffness_assembler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/stiffness_assembler.cpp.o
+.PHONY : src/stiffness_assembler.cpp.o
 
-src/stifness_assembler.i: src/stifness_assembler.cpp.i
-.PHONY : src/stifness_assembler.i
+src/stiffness_assembler.i: src/stiffness_assembler.cpp.i
+.PHONY : src/stiffness_assembler.i
 
 # target to preprocess a source file
-src/stifness_assembler.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.i
-.PHONY : src/stifness_assembler.cpp.i
+src/stiffness_assembler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/stiffness_assembler.cpp.i
+.PHONY : src/stiffness_assembler.cpp.i
 
-src/stifness_assembler.s: src/stifness_assembler.cpp.s
-.PHONY : src/stifness_assembler.s
+src/stiffness_assembler.s: src/stiffness_assembler.cpp.s
+.PHONY : src/stiffness_assembler.s
 
 # target to generate assembly for a file
-src/stifness_assembler.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.s
-.PHONY : src/stifness_assembler.cpp.s
+src/stiffness_assembler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wave_solver.dir/build.make CMakeFiles/wave_solver.dir/src/stiffness_assembler.cpp.s
+.PHONY : src/stiffness_assembler.cpp.s
 
 # Help Target
 help:
@@ -216,9 +216,9 @@ help:
 	@echo "... src/mass_assembler.o"
 	@echo "... src/mass_assembler.i"
 	@echo "... src/mass_assembler.s"
-	@echo "... src/stifness_assembler.o"
-	@echo "... src/stifness_assembler.i"
-	@echo "... src/stifness_assembler.s"
+	@echo "... src/stiffness_assembler.o"
+	@echo "... src/stiffness_assembler.i"
+	@echo "... src/stiffness_assembler.s"
 .PHONY : help
 
 

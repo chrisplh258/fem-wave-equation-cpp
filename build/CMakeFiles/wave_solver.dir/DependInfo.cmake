@@ -10,7 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/main.cpp" "CMakeFiles/wave_solver.dir/src/main.cpp.o" "gcc" "CMakeFiles/wave_solver.dir/src/main.cpp.o.d"
   "/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/mass_assembler.cpp" "CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o" "gcc" "CMakeFiles/wave_solver.dir/src/mass_assembler.cpp.o.d"
-  "/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/stifness_assembler.cpp" "CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o" "gcc" "CMakeFiles/wave_solver.dir/src/stifness_assembler.cpp.o.d"
+  "/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/src/stiffness_assembler.cpp" "CMakeFiles/wave_solver.dir/src/stiffness_assembler.cpp.o" "gcc" "CMakeFiles/wave_solver.dir/src/stiffness_assembler.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
