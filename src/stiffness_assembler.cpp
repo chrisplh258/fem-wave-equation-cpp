@@ -1,86 +1,97 @@
 #include "stiffness_assembler.h"
 
-#include <deal.II/base/quadrature_lib.h>           
-#include <deal.II/fe/fe_values.h>                     
-#include <deal.II/dofs/dof_tools.h>                   
-#include <deal.II/lac/dynamic_sparsity_pattern.h>     
-#include <deal.II/lac/full_matrix.h>                  
-#include <vector>                                      
+#include <deal.II/base/quadrature_lib.h>
+#include <deal.II/fe/fe_values.h>
+#include <deal.II/meshworker/mesh_loop.h>
+#include <deal.II/lac/full_matrix.h>
+#include <deal.II/lac/vector_operation.h>
+#include <deal.II/base/tensor.h>
 
-#include <deal.II/lac/sparsity_pattern.h>    
-#include <deal.II/lac/vector_operation.h>    
-#include <deal.II/base/tensor.h>              
+#include <vector>
 
-
+using namespace dealii;
 
 template <int dim>
-void assemble_stiffness_matrix_fe(const dealii::DoFHandler<dim> &dof_handler,
-                                  dealii::SparseMatrix<double>  &K,
-                                  const double c2)
+void assemble_stiffness_matrix_fe(const DoFHandler<dim> &dof_handler,
+                                  SparseMatrix<double>  &K)
 {
   const auto &fe = dof_handler.get_fe();
+  QGauss<dim> quad(fe.degree + 1);
+  const UpdateFlags flags = update_gradients | update_JxW_values;
 
-  //gauss points and weights
-  dealii::QGauss<dim> quad(fe.degree + 1);
+  // Thread-local scratch data
+  struct Scratch {
+    FEValues<dim> fe_values;
+    Scratch(const FiniteElement<dim> &fe,
+            const Quadrature<dim>    &q,
+            const UpdateFlags         f)
+      : fe_values(fe, q, f) {}
+    Scratch(const Scratch &s)
+      : fe_values(s.fe_values.get_fe(),
+                  s.fe_values.get_quadrature(),
+                  s.fe_values.get_update_flags()) {}
+  };
 
-  
-  //update_gradients: we need ∇φ_i(x_q), ∇φ_j(x_q)
-  //update_JxW_values: we need |detJ| * w_q (volume element)
-  dealii::FEValues<dim> fe_values(
-      fe, quad,
-      dealii::update_gradients |
-      dealii::update_JxW_values);
+  // Per-cell buffer for serial combine
+  struct Copy {
+    FullMatrix<double>                   cell_matrix;
+    std::vector<types::global_dof_index> dof_indices;
+    explicit Copy(unsigned int dofs_per_cell)
+      : cell_matrix(dofs_per_cell, dofs_per_cell),
+        dof_indices(dofs_per_cell) {}
+  };
 
-  //dofs per cell
-  const unsigned int dofs_per_cell = fe.n_dofs_per_cell();
-  //Total number of quadrature points per element
-  const unsigned int n_q = quad.size();
+  Scratch scratch(fe, quad, flags);
+  Copy    copy(fe.n_dofs_per_cell());
 
-
-  dealii::FullMatrix<double> cell(dofs_per_cell, dofs_per_cell);
-  std::vector<dealii::types::global_dof_index> dof_indices(dofs_per_cell);
-
-  // Loop over elements
-  for (const auto &cell_it : dof_handler.active_cell_iterators())
+  // Parallel worker on cells
+  auto worker = [&](const auto &cell, Scratch &scratch, Copy &copy)
   {
-    
-    // Update data for each element
-    fe_values.reinit(cell_it);
-    cell = 0.0;
+    auto &fe_values = scratch.fe_values;
+    fe_values.reinit(cell);
 
-    ///////////////// Build local mass matrix ///////////////
-    //Loop over quadrature (Gauss) points
+    const unsigned int dofs_per_cell = fe_values.dofs_per_cell;
+    const unsigned int n_q           = fe_values.n_quadrature_points;
+
+    copy.cell_matrix = 0.0;
+
     for (unsigned int q = 0; q < n_q; ++q)
     {
-      //Loop over local row DOFs (test functions)
+      const double JxW = fe_values.JxW(q);
       for (unsigned int i = 0; i < dofs_per_cell; ++i)
       {
-        // Gradient of TEST function i at quadrature point q
-        const dealii::Tensor<1,dim> grad_phi_i = fe_values.shape_grad(i, q);
-
-        // Loop over local column DOFs (trial functions)
+        const Tensor<1,dim> grad_i = fe_values.shape_grad(i, q);
         for (unsigned int j = 0; j < dofs_per_cell; ++j)
         {
-          // Gradient of TRIAL function j at quadrature point q
-          const dealii::Tensor<1,dim> grad_phi_j = fe_values.shape_grad(j, q);
-          cell(i, j) += c2 *
-                        (grad_phi_i * grad_phi_j) *
-                        fe_values.JxW(q);
+          const Tensor<1,dim> grad_j = fe_values.shape_grad(j, q);
+          copy.cell_matrix(i, j) += (grad_i * grad_j) * JxW;
         }
       }
     }
 
-    cell_it->get_dof_indices(dof_indices);
-    for (unsigned int i = 0; i < dofs_per_cell; ++i)
-      for (unsigned int j = 0; j < dofs_per_cell; ++j)
-        K.add(dof_indices[i], dof_indices[j], cell(i, j));
-  }
+    cell->get_dof_indices(copy.dof_indices);
+  };
 
-  K.compress(dealii::VectorOperation::add);
+  // Serial copier: safe to write to global K
+  auto copier = [&](const Copy &copy)
+  {
+    const auto &I = copy.dof_indices;
+    for (unsigned int i = 0; i < copy.cell_matrix.m(); ++i)
+      for (unsigned int j = 0; j < copy.cell_matrix.n(); ++j)
+        K.add(I[i], I[j], copy.cell_matrix(i, j));
+  };
 
+  MeshWorker::mesh_loop(dof_handler.begin_active(),
+                        dof_handler.end(),
+                        worker,
+                        copier,
+                        scratch,
+                        copy,
+                        MeshWorker::assemble_own_cells);
+
+  K.compress(VectorOperation::add);
 }
 
-// Compile for 2D
-template void assemble_stiffness_matrix_fe<2>(const dealii::DoFHandler<2>&,
-                                              dealii::SparseMatrix<double>&,
-                                              const double);
+// Explicit instantiation for 2D
+template void assemble_stiffness_matrix_fe<2>(const DoFHandler<2>&,
+                                              SparseMatrix<double>&);

@@ -2,72 +2,97 @@
 
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/fe/fe_values.h>
-#include <deal.II/dofs/dof_tools.h>
-
-#include <deal.II/lac/dynamic_sparsity_pattern.h>
-#include <deal.II/lac/sparsity_pattern.h>
+#include <deal.II/meshworker/mesh_loop.h>
 #include <deal.II/lac/full_matrix.h>
 #include <deal.II/lac/vector_operation.h>
 
 #include <vector>
 
+using namespace dealii;
 
-//Dimension
 template <int dim>
-
-
-void assemble_mass_matrix_fe(const dealii::DoFHandler<dim> &dof_handler,
-                             dealii::SparseMatrix<double>  &M,
-                             const double rho)
+void assemble_mass_matrix_fe(const DoFHandler<dim> &dof_handler,
+                             SparseMatrix<double>  &M,
+                             const double           rho)
 {
   const auto &fe = dof_handler.get_fe();
+  QGauss<dim> quad(fe.degree + 1);
+  const UpdateFlags flags = update_values | update_JxW_values;
 
-  //gauss points and weights
-  dealii::QGauss<dim> quad(fe.degree + 1);
+  // Thread-local scratch data
+  struct Scratch {
+    FEValues<dim> fe_values;
+    Scratch(const FiniteElement<dim> &fe,
+            const Quadrature<dim>    &q,
+            const UpdateFlags         f)
+      : fe_values(fe, q, f) {}
+    Scratch(const Scratch &s)
+      : fe_values(s.fe_values.get_fe(),
+                  s.fe_values.get_quadrature(),
+                  s.fe_values.get_update_flags()) {}
+  };
 
-  //Shape function values at Gauss points and |detJ|*weight from quad
-  dealii::FEValues<dim> fe_values(fe, quad,
-                                  dealii::update_values | dealii::update_JxW_values);
+  // Per-cell buffer passed to the serial copier
+  struct Copy {
+    FullMatrix<double>                   cell_matrix;
+    std::vector<types::global_dof_index> dof_indices;
+    explicit Copy(unsigned int dofs_per_cell)
+      : cell_matrix(dofs_per_cell, dofs_per_cell),
+        dof_indices(dofs_per_cell) {}
+  };
 
-  //dofs per cell
-  const unsigned int dofs_per_cell = fe.n_dofs_per_cell();
-  //Total number of quadrature points per element
-  const unsigned int n_q = quad.size();
+  Scratch scratch(fe, quad, flags);
+  Copy    copy(fe.n_dofs_per_cell());
 
-  dealii::FullMatrix<double> cell(dofs_per_cell, dofs_per_cell);
-  std::vector<dealii::types::global_dof_index> dof_indices(dofs_per_cell);
-
-  //Loop over elements
-  for (const auto &cell_it : dof_handler.active_cell_iterators())
+  // Parallel worker on each cell
+  auto worker = [&](const auto &cell, Scratch &scratch, Copy &copy)
   {
+    auto &fe_values = scratch.fe_values;
+    fe_values.reinit(cell);
 
-    
-    // Update data for each element
-    fe_values.reinit(cell_it);
-    cell = 0.0;
+    const unsigned int dofs_per_cell = fe_values.dofs_per_cell;
+    const unsigned int n_q           = fe_values.n_quadrature_points;
 
-    ///////////////// Build local mass matrix ///////////////
-    //Loop over quadrature (Gauss) points
-    for (unsigned int q=0; q<n_q; ++q)
-      //Loop over local row DOFs (test functions)
-      for (unsigned int i=0; i<dofs_per_cell; ++i)
-      // Loop over local column DOFs (trial functions)
-        for (unsigned int j=0; j<dofs_per_cell; ++j)
-          cell(i,j) += rho *
-                       fe_values.shape_value(i,q) *
-                       fe_values.shape_value(j,q) *
-                       fe_values.JxW(q);
+    copy.cell_matrix = 0.0;
 
-    cell_it->get_dof_indices(dof_indices);
-    for (unsigned int i=0; i<dofs_per_cell; ++i)
-      for (unsigned int j=0; j<dofs_per_cell; ++j)
-        M.add(dof_indices[i], dof_indices[j], cell(i,j));
-  }
+    for (unsigned int q = 0; q < n_q; ++q)
+    {
+      const double JxW = fe_values.JxW(q);
+      for (unsigned int i = 0; i < dofs_per_cell; ++i)
+      {
+        const double phi_i = fe_values.shape_value(i, q);
+        for (unsigned int j = 0; j < dofs_per_cell; ++j)
+        {
+          const double phi_j = fe_values.shape_value(j, q);
+          copy.cell_matrix(i, j) += rho * phi_i * phi_j * JxW;
+        }
+      }
+    }
 
-M.compress(dealii::VectorOperation::add);
+    cell->get_dof_indices(copy.dof_indices);
+  };
+
+  // Serial copier: safe to touch global matrix here
+  auto copier = [&](const Copy &copy)
+  {
+    const auto &I = copy.dof_indices;
+    for (unsigned int i = 0; i < copy.cell_matrix.m(); ++i)
+      for (unsigned int j = 0; j < copy.cell_matrix.n(); ++j)
+        M.add(I[i], I[j], copy.cell_matrix(i, j));
+  };
+
+  MeshWorker::mesh_loop(dof_handler.begin_active(),
+                        dof_handler.end(),
+                        worker,
+                        copier,
+                        scratch,
+                        copy,
+                        MeshWorker::assemble_own_cells);
+
+  M.compress(VectorOperation::add);
 }
 
-// Compile for 2D
-template void assemble_mass_matrix_fe<2>(const dealii::DoFHandler<2>&,
-                                         dealii::SparseMatrix<double>&,
+// Explicit instantiation for 2D
+template void assemble_mass_matrix_fe<2>(const DoFHandler<2>&,
+                                         SparseMatrix<double>&,
                                          const double);

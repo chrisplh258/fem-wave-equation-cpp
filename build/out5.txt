@@ -1,0 +1,18 @@
+Number of DoFs: 1089
+deal.II threads: 8
+Step 100/1414 done.
+Step 200/1414 done.
+Step 300/1414 done.
+Step 400/1414 done.
+Step 500/1414 done.
+Step 600/1414 done.
+Step 700/1414 done.
+Step 800/1414 done.
+Step 900/1414 done.
+Step 1000/1414 done.
+Step 1100/1414 done.
+Step 1200/1414 done.
+Step 1300/1414 done.
+Step 1400/1414 done.
+Wrote final_solution.vtu at t = 1.414
+SUMMARY h=0.05 dofs=1089 steps=1414 c=1 L2_error=0.000842172 rel_L2=0.00168435 elapsed_ms=245

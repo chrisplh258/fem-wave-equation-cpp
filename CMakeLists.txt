@@ -24,5 +24,10 @@ file(GLOB SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 # Define the executable
 add_executable(wave_solver ${SOURCES})
 
+# Define the test
+add_executable(run_tests tests/test.cpp)
+add_dependencies(run_tests wave_solver)  # make sure solver builds first
+
+
 # Link deal.II 
 deal_ii_setup_target(wave_solver)

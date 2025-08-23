@@ -39,21 +39,57 @@
 #include <deal.II/fe/mapping_q1.h>
 #include <deal.II/fe/component_mask.h>  
 
+#include <deal.II/base/multithread_info.h>
+#include <cstring>   // strcmp
+#include <cstdlib>   // strtod
+#include <chrono>
+
 
 
 using namespace dealii;
 
-int main()
+int main(int argc, char** argv)
 {
+
+  // -------------------- Handle arguments --------------------
+  double mesh_size = 0.025;   // default
+  double dt        = 5e-4;    // default
+  double c         = 1.0;     // default
+
+  for (int i = 1; i + 1 < argc; ++i) {
+    if (std::strcmp(argv[i], "--h") == 0 || std::strcmp(argv[i], "-h") == 0) {
+      char* end = nullptr; double v = std::strtod(argv[i+1], &end);
+      if (!end || *end!='\0' || v <= 0.0 || v >= 1.0) {
+        std::cerr << "Invalid --h (0<h<1): " << argv[i+1] << "\n";
+        return 2;
+      }
+      mesh_size = v;
+    } else if (std::strcmp(argv[i], "--dt") == 0) {
+      char* end = nullptr; double v = std::strtod(argv[i+1], &end);
+      if (!end || *end!='\0' || v <= 0.0) {
+        std::cerr << "Invalid --dt (must be > 0): " << argv[i+1] << "\n";
+        return 2; // <-- makes Test4 pass
+      }
+      dt = v;
+    } else if (std::strcmp(argv[i], "--c") == 0) {
+      char* end = nullptr; double v = std::strtod(argv[i+1], &end);
+      if (!end || *end!='\0' || v <= 0.0) {
+        std::cerr << "Invalid --c (must be > 0): " << argv[i+1] << "\n";
+        return 2;
+      }
+      c = v;
+    }
+  }
+
 
 
 
   // -------------------- mesh --------------------
 
+ 
   Triangulation<2> triangulation;
   GridGenerator::hyper_cube(triangulation, 0, 1);
 
-  const double       mesh_size        = 0.025;
   const unsigned int refinement_level =
     static_cast<unsigned int>(std::ceil(std::log2(1.0 / mesh_size)));
   triangulation.refine_global(refinement_level);
@@ -69,6 +105,8 @@ int main()
   dof_handler.distribute_dofs(fe);
 
   std::cout << "Number of DoFs: " << dof_handler.n_dofs() << std::endl;
+  std::cout << "deal.II threads: " << MultithreadInfo::n_threads() << std::endl;
+
 
 
 
@@ -137,10 +175,21 @@ int main()
  
  // -------------------- time parameters --------------------
 
-  const double       c       = 1.0;
-  const double       dt      = 5e-4;
-  const double T_exact  = std::sqrt(2.0);
-  const unsigned int n_steps = static_cast<unsigned int>(std::round(T_exact / dt));
+  // Safety checks FIRST (so we don't divide by zero)
+  if (!(dt > 0.0)) { std::cerr << "Invalid dt\n"; return 2; }
+  if (!(c  > 0.0)) { std::cerr << "Invalid c\n"; return 2; }
+
+  // If you want one period for any c:
+  const double T_final = std::sqrt(2.0) / c;
+
+  const unsigned int n_steps =
+    static_cast<unsigned int>(std::round(T_final / dt));
+  if (n_steps == 0) {
+    std::cerr << "n_steps computed as 0 (dt too large for T_final)\n";
+    return 2;
+  }
+
+
 
 
 
@@ -210,6 +259,7 @@ int main()
 
   // -------------------- time stepping --------------------
   double time = 0.0;
+  auto t_start = std::chrono::steady_clock::now();
 
   for (unsigned int n = 0; n < n_steps; ++n)
   {
@@ -254,6 +304,9 @@ int main()
       std::cout << "Step " << (n + 1) << "/" << n_steps << " done.\n";
 }
 time = n_steps * dt; 
+auto t_end = std::chrono::steady_clock::now();
+const long long elapsed_ms =
+std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
 
 // -------------------- write final-time VTU only --------------------
 {
@@ -279,52 +332,52 @@ time = n_steps * dt;
 
 
 
-// -------------------- Error at final time --------------------
 
+// -------------------- Error at final time (threaded via deal.II) --------------------
 {
-MappingQ1<2> mapping;
-const QGauss<2> q(5);
-
-  FEValues<2> fev(mapping, fe, q,
-                  update_values | update_quadrature_points | update_JxW_values);
-
   class ExactU_t : public Function<2> {
   public:
-    explicit ExactU_t(double t) : Function<2>(1), t_(t) {}
+    ExactU_t(double t, double c) : Function<2>(1), t_(t), c_(c) {}
     double value(const Point<2>& p, const unsigned int = 0) const override {
       return std::sin(numbers::PI * p[0]) * std::sin(numbers::PI * p[1]) *
-             std::cos(numbers::PI * std::sqrt(2.0) * t_);
+            std::cos(numbers::PI * std::sqrt(2.0) * c_ * t_);
     }
   private:
-    double t_;
-  } exact(time);
+    double t_, c_;
+  } exact(time, c);
 
-  std::vector<double> uh(q.size());
-  double integral = 0.0;
+  // Per-cell error contributions ( in parallel)
+  Vector<double> error_per_cell(triangulation.n_active_cells());
 
-  for (const auto &cell : dof_handler.active_cell_iterators())
-  {
-    fev.reinit(cell);
-    fev.get_function_values(u_n, uh);
+  // Compute L2 error;  parallelized internally (TBB)
+  const QGauss<2> q(5);
+  VectorTools::integrate_difference(dof_handler,
+                                    u_n,
+                                    exact,
+                                    error_per_cell,
+                                    q,
+                                    VectorTools::L2_norm);
 
-    for (unsigned int qn = 0; qn < q.size(); ++qn)
-    {
-      const auto &x = fev.quadrature_point(qn);
-      const double e = uh[qn] - exact.value(x);
-      integral += (e * e) * fev.JxW(qn);
-    }
-  }
+  // Sum of cell contributions 
+  const double L2 = VectorTools::compute_global_error(triangulation,
+                                                      error_per_cell,
+                                                      VectorTools::L2_norm);
 
-  const double L2 = std::sqrt(integral);
   const double u_exact_L2 =
-      0.5 * std::abs(std::cos(numbers::PI * std::sqrt(2.0) * time));
+    0.5 * std::abs(std::cos(numbers::PI * std::sqrt(2.0) * c * time));
   const double rel_L2 = (u_exact_L2 > 0) ? (L2 / u_exact_L2) : 0.0;
 
-  std::cout << std::setprecision(12)
-            << "Final-time L2 error = " << L2
-            << "  |u|_L2(exact) = " << u_exact_L2
-            << "  relative L2 = " << rel_L2 << "\n";
+  std::cout << "SUMMARY "
+          << "h=" << mesh_size
+          << " dofs=" << dof_handler.n_dofs()
+          << " steps=" << n_steps
+          << " c=" << c
+          << " L2_error=" << L2
+          << " rel_L2=" << rel_L2
+          << " elapsed_ms=" << elapsed_ms
+          << "\n";
 }
+
 
 return 0;
 
