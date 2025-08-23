@@ -1,0 +1,8 @@
+build
+.git
+.vscode
+*.vtu
+*.vtk
+*.png
+*.dat
+*.log
