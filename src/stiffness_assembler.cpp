@@ -43,6 +43,7 @@ void assemble_stiffness_matrix_fe(const dealii::DoFHandler<dim> &dof_handler,
   // Loop over elements
   for (const auto &cell_it : dof_handler.active_cell_iterators())
   {
+    
     // Update data for each element
     fe_values.reinit(cell_it);
     cell = 0.0;
