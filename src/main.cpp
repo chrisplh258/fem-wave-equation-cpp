@@ -40,8 +40,8 @@
 #include <deal.II/fe/component_mask.h>  
 
 #include <deal.II/base/multithread_info.h>
-#include <cstring>   // strcmp
-#include <cstdlib>   // strtod
+#include <cstring>   
+#include <cstdlib>  
 #include <chrono>
 
 
@@ -95,6 +95,19 @@ int main(int argc, char** argv)
   triangulation.refine_global(refinement_level);
 
 
+  // Mark boundary ids: Dirichlet on x-sides (id=1), Neumann elsewhere (id=0)
+  for (auto &cell : triangulation.active_cell_iterators())
+    for (unsigned int f = 0; f < GeometryInfo<2>::faces_per_cell; ++f)
+      if (cell->face(f)->at_boundary())
+      {
+        const auto center = cell->face(f)->center();
+        if (std::abs(center[0] - 0.0) < 1e-12 || std::abs(center[0] - 1.0) < 1e-12)
+          cell->face(f)->set_boundary_id(1); // Dirichlet (x=0,1)
+        else
+          cell->face(f)->set_boundary_id(0); // Neumann (y=0,1)
+      }
+
+
 
 
 
@@ -113,12 +126,12 @@ int main(int argc, char** argv)
 
 
  
-  // -------------------- homogeneous Dirichlet BC --------------------
+  // -------------------- Boundary conditions --------------------
 
 
   AffineConstraints<double> constraints;
   VectorTools::interpolate_boundary_values(
-    dof_handler, 0 /*boundary id*/, Functions::ZeroFunction<2>(), constraints);
+    dof_handler, /*boundary id*/ 1, Functions::ZeroFunction<2>(), constraints);
   constraints.close();
 
 
@@ -157,14 +170,13 @@ int main(int argc, char** argv)
   public:
     double value(const Point<2> &p, const unsigned int = 0) const override
     {
-      return std::sin(numbers::PI * p[0]) * std::sin(numbers::PI * p[1]);
+      return std::sin(numbers::PI * p[0]);
     }
   };
 
   VectorTools::interpolate(dof_handler, InitialDisplacement(), u_n);
   v_n = 0.0;
 
-  // Enforce BC on Initial conditions
   constraints.distribute(u_n);
   constraints.distribute(v_n);
 
@@ -180,7 +192,7 @@ int main(int argc, char** argv)
   if (!(c  > 0.0)) { std::cerr << "Invalid c\n"; return 2; }
 
   // If you want one period for any c:
-  const double T_final = std::sqrt(2.0) / c;
+  const double T_final = 2.0 / c;
 
   const unsigned int n_steps =
     static_cast<unsigned int>(std::round(T_final / dt));
@@ -335,21 +347,17 @@ std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
 
 // -------------------- Error at final time (threaded via deal.II) --------------------
 {
-  class ExactU_t : public Function<2> {
+class ExactU_t : public Function<2> {
   public:
     ExactU_t(double t, double c) : Function<2>(1), t_(t), c_(c) {}
     double value(const Point<2>& p, const unsigned int = 0) const override {
-      return std::sin(numbers::PI * p[0]) * std::sin(numbers::PI * p[1]) *
-            std::cos(numbers::PI * std::sqrt(2.0) * c_ * t_);
+      return std::sin(numbers::PI * p[0]) * std::cos(numbers::PI * c_ * t_);
     }
   private:
     double t_, c_;
   } exact(time, c);
 
-  // Per-cell error contributions ( in parallel)
   Vector<double> error_per_cell(triangulation.n_active_cells());
-
-  // Compute L2 error;  parallelized internally (TBB)
   const QGauss<2> q(5);
   VectorTools::integrate_difference(dof_handler,
                                     u_n,
@@ -358,27 +366,31 @@ std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count();
                                     q,
                                     VectorTools::L2_norm);
 
-  // Sum of cell contributions 
   const double L2 = VectorTools::compute_global_error(triangulation,
                                                       error_per_cell,
                                                       VectorTools::L2_norm);
 
+  //||sin(pi x)||_L2([0,1]^2) = sqrt(1/2)
   const double u_exact_L2 =
-    0.5 * std::abs(std::cos(numbers::PI * std::sqrt(2.0) * c * time));
+    std::sqrt(0.5) * std::abs(std::cos(numbers::PI * c * time));
+
   const double rel_L2 = (u_exact_L2 > 0) ? (L2 / u_exact_L2) : 0.0;
 
+  std::cout << std::setprecision(12)
+            << "Final-time L2 error = " << L2
+            << "  |u|_L2(exact) = " << u_exact_L2
+            << "  relative L2 = " << rel_L2 << "\n";
+
   std::cout << "SUMMARY "
-          << "h=" << mesh_size
-          << " dofs=" << dof_handler.n_dofs()
-          << " steps=" << n_steps
-          << " c=" << c
-          << " L2_error=" << L2
-          << " rel_L2=" << rel_L2
-          << " elapsed_ms=" << elapsed_ms
-          << "\n";
+            << "h=" << mesh_size
+            << " dofs=" << dof_handler.n_dofs()
+            << " steps=" << n_steps
+            << " c=" << c
+            << " L2_error=" << L2
+            << " rel_L2=" << rel_L2
+            << " elapsed_ms=" << elapsed_ms
+            << "\n";
 }
 
-
-return 0;
-
+  return 0;
 }
