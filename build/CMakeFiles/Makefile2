@@ -117,7 +117,7 @@ CMakeFiles/wave_solver.dir/clean:
 # Target rules for target CMakeFiles/run_tests.dir
 
 # All Build rule for target.
-CMakeFiles/run_tests.dir/all: CMakeFiles/wave_solver.dir/all
+CMakeFiles/run_tests.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles --progress-num=1,2 "Built target run_tests"
@@ -125,7 +125,7 @@ CMakeFiles/run_tests.dir/all: CMakeFiles/wave_solver.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/run_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/run_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles 0
 .PHONY : CMakeFiles/run_tests.dir/rule
@@ -135,7 +135,7 @@ run_tests: CMakeFiles/run_tests.dir/rule
 .PHONY : run_tests
 
 # codegen rule for target.
-CMakeFiles/run_tests.dir/codegen: CMakeFiles/wave_solver.dir/all
+CMakeFiles/run_tests.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/codegen
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles --progress-num=1,2 "Finished codegen for target run_tests"
 .PHONY : CMakeFiles/run_tests.dir/codegen

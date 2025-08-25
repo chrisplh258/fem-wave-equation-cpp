@@ -30,3 +30,21 @@
 *.exe
 *.out
 *.app
+
+# -------------------------
+# Project-specific ignores
+# -------------------------
+
+# CMake build directory (always regenerated inside Docker or locally)
+build/
+
+# Folder where you save solver/test outputs on host
+outputs/
+
+# Solver result files
+out*.txt
+*.vtu
+
+# OS/editor junk
+.DS_Store
+*.swp

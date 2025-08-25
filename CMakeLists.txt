@@ -16,18 +16,19 @@ endif()
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Find deal.II
-find_package(deal.II 9.7.0 REQUIRED HINTS ~/Documents/software/deal.II-v9.7.0)
-
+find_package(deal.II CONFIG REQUIRED)
 # Add source files
 file(GLOB SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
-# Define the executable
+# Solver 
 add_executable(wave_solver ${SOURCES})
+target_include_directories(wave_solver PRIVATE ${PROJECT_SOURCE_DIR}/include)
+deal_ii_setup_target(wave_solver) 
 
-# Define the test
+# Tests
+enable_testing()
 add_executable(run_tests tests/test.cpp)
-add_dependencies(run_tests wave_solver)  # make sure solver builds first
-
-
-# Link deal.II 
-deal_ii_setup_target(wave_solver)
+target_include_directories(run_tests PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_compile_definitions(run_tests PRIVATE BIN=\"${CMAKE_BINARY_DIR}/wave_solver\")
+deal_ii_setup_target(run_tests)   
+add_test(NAME run_tests COMMAND run_tests)

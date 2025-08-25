@@ -6,7 +6,7 @@
 #include <string>
 
 #ifndef BIN
-#define BIN "./wave_solver"
+#define BIN "./build/wave_solver"
 #endif
 
 // Run solver, redirect output to file

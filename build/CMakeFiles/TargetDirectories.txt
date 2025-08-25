@@ -1,4 +1,5 @@
 /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles/wave_solver.dir
 /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles/run_tests.dir
+/Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles/test.dir
 /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles/edit_cache.dir
 /Users/chrpi428/Documents/courses/TTSSE/Project/fem-wave-equation-cpp/build/CMakeFiles/rebuild_cache.dir
